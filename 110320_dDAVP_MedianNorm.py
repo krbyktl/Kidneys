@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import statsmodels as sm
 
 
 #import data
@@ -19,19 +20,26 @@ fileloc = path + file
 df_cntl = pd.read_excel(fileloc, sheet_name="median norm", header=2)
 
 #variables
-df_cntl['C1_avg'] = df_cntl[['C1_Replicate1','C1_Replicate2','C1_Replicate3']].mean(axis=1)
-df_cntl['C2_avg'] = df_cntl[['C2_Replicate1','C2_Replicate2','C2_Replicate3']].mean(axis=1)
-df_cntl['C3_avg'] = df_cntl[['C3_Replicate1','C3_Replicate2','C3_Replicate3']].mean(axis=1)
-df_cntl['C4_avg'] = df_cntl[['C4_Replicate1','C4_Replicate2','C4_Replicate3']].mean(axis=1)
-df_cntl['V1_avg'] = df_cntl[['V1_Replicate1','V1_Replicate2','V1_Replicate3']].mean(axis=1)
-df_cntl['V2_avg'] = df_cntl[['V2_Replicate1','V2_Replicate2','V2_Replicate3']].mean(axis=1)
-df_cntl['V3_avg'] = df_cntl[['V3_Replicate1','V3_Replicate2','V3_Replicate3']].mean(axis=1)
-df_cntl['V4_avg'] = df_cntl[['V4_Replicate1','V4_Replicate2','V4_Replicate3']].mean(axis=1)
 
-df_cntl['T1_log'] = np.log2(df_cntl['V1_avg']/df_cntl['C1_avg'])
-df_cntl['T2_log'] = np.log2(df_cntl['V2_avg']/df_cntl['C2_avg'])
-df_cntl['T3_log'] = np.log2(df_cntl['V3_avg']/df_cntl['C3_avg'])
-df_cntl['T4_log'] = np.log2(df_cntl['V4_avg']/df_cntl['C4_avg'])
+df_cntl['T1_log_1'] = np.log2(df_cntl['V1_Replicate1']/df_cntl['C1_Replicate1'])
+df_cntl['T1_log_2'] = np.log2(df_cntl['V1_Replicate2']/df_cntl['C1_Replicate2'])
+df_cntl['T1_log_3'] = np.log2(df_cntl['V1_Replicate3']/df_cntl['C1_Replicate3'])
+df_cntl['T2_log_1'] = np.log2(df_cntl['V2_Replicate1']/df_cntl['C2_Replicate1'])
+df_cntl['T2_log_2'] = np.log2(df_cntl['V2_Replicate2']/df_cntl['C2_Replicate2'])
+df_cntl['T2_log_3'] = np.log2(df_cntl['V2_Replicate3']/df_cntl['C2_Replicate3'])
+df_cntl['T3_log_1'] = np.log2(df_cntl['V3_Replicate1']/df_cntl['C3_Replicate1'])
+df_cntl['T3_log_2'] = np.log2(df_cntl['V3_Replicate2']/df_cntl['C3_Replicate2'])
+df_cntl['T3_log_3'] = np.log2(df_cntl['V3_Replicate3']/df_cntl['C3_Replicate3'])
+df_cntl['T4_log_1'] = np.log2(df_cntl['V4_Replicate1']/df_cntl['C4_Replicate1'])
+df_cntl['T4_log_2'] = np.log2(df_cntl['V4_Replicate2']/df_cntl['C4_Replicate2'])
+df_cntl['T4_log_3'] = np.log2(df_cntl['V4_Replicate3']/df_cntl['C4_Replicate3'])
+
+
+df_cntl['T1_log'] = df_cntl[['T1_log_1','T1_log_2','T1_log_3']].mean(axis=1)
+df_cntl['T2_log'] = df_cntl[['T2_log_1','T2_log_2','T2_log_3']].mean(axis=1)
+df_cntl['T3_log'] = df_cntl[['T3_log_1','T3_log_2','T3_log_3']].mean(axis=1)
+df_cntl['T4_log'] = df_cntl[['T4_log_1','T4_log_2','T4_log_3']].mean(axis=1)
+
 
 #abundance of unqiue peptides non-phos data
 fig, (ax1, ax2, ax3, ax4) = plt.subplots(1,4,figsize=(20,5))
@@ -52,10 +60,23 @@ plt.setp((ax1, ax2, ax3, ax4), ylim = (0,2500))
 plt.savefig("abundance_distribution", dpi = 300)
 plt.close()
 
-#volcano plot FDR vs. ratio(dDAVP/vehicle)
+#volcano plot of peptide abundance FDR vs. ratio(dDAVP/vehicle)
+ttest_T1 = []
+ttest_T2 = []
+ttest_T3 = []
+ttest_T4 = []
+
+
+for i in range(len(df_cntl['V1_Replicate1'])):
+    c1
+    c2
+    c3
+    v1
+    v2
+    v3
+    sm.stats.weightstats.ttest_ind()
 
 #total heatmap time course
-df_cntl = df_cntl.dropna(subset=['Gene Symbol'])
 df_hm = pd.DataFrame({'T1':df_cntl['T1_log'], 'T2':df_cntl['T2_log'],
                       'T3':df_cntl['T3_log'],'T4':df_cntl['T4_log']})
 df_hm = pd.DataFrame(df_hm.values,
