@@ -10,13 +10,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-import statsmodels as sm
 
 
 #import data
-path = "C:/Users/leokt/Documents/Time course/"
-file = "dDAVP_Time_Proteins_MedianNorm.xlsx"
-fileloc = path + file
+fileloc = "J:\Depot - dDAVP-time course - Kirby\Analysis\\201110_Total_Protein.xlsx"
 df_cntl = pd.read_excel(fileloc, sheet_name="median norm", header=2)
 
 #variables
@@ -45,7 +42,7 @@ df_cntl['T4_log'] = df_cntl[['T4_log_1','T4_log_2','T4_log_3']].mean(axis=1)
 fig, (ax1, ax2, ax3, ax4) = plt.subplots(1,4,figsize=(20,5))
 plt.subplots_adjust(wspace=0, hspace=0)
 dist_T1 = sns.distplot(df_cntl['T1_log'], axlabel = "$log_2$(dDAVP/control)", bins = 180, kde = False, color = "black", ax = ax1)
-ax1.set_ylabel("Number of Unique Peptides Total Abundance")
+ax1.set_ylabel("Number of Unique Proteins")
 ax1.set_title("dDAVP vs. Vehicle 1 min")
 dist_T2 = sns.distplot(df_cntl['T2_log'], axlabel = "$log_2$(dDAVP/control)", bins = 180, kde = False, color = "blue", ax = ax2)
 ax2.set_yticklabels([])
@@ -59,22 +56,6 @@ ax4.set_title("dDAVP vs. Vehicle 15 min")
 plt.setp((ax1, ax2, ax3, ax4), ylim = (0,2500))
 plt.savefig("abundance_distribution", dpi = 300)
 plt.close()
-
-#volcano plot of peptide abundance FDR vs. ratio(dDAVP/vehicle)
-ttest_T1 = []
-ttest_T2 = []
-ttest_T3 = []
-ttest_T4 = []
-
-
-for i in range(len(df_cntl['V1_Replicate1'])):
-    c1
-    c2
-    c3
-    v1
-    v2
-    v3
-    sm.stats.weightstats.ttest_ind()
 
 #total heatmap time course
 df_hm = pd.DataFrame({'T1':df_cntl['T1_log'], 'T2':df_cntl['T2_log'],
@@ -92,7 +73,150 @@ plt.title('Time Course Heatmap Total Abundance', loc='left')
 plt.savefig("abundance_heatmap", dpi = 1200)
 plt.close()
 
-#heatmap transcription factors?
+#volcano plot of peptide abundance FDR vs. ratio(dDAVP/vehicle)
+#15 min
+df_T4 = pd.read_excel(fileloc, sheet_name="15 min")
+
+fig, ax = plt.subplots(figsize=(12,10))
+plt_T4 = sns.scatterplot(data = df_T4, x="OVERALL RATIO",  y="minus log p",
+                         color = 'lightgrey')
+outr = df_T4.query('`minus log p` > 1.303 & `OVERALL RATIO` > 0.054397916*2')
+outl = df_T4.query('`minus log p` > 1.303 & `OVERALL RATIO` < -0.054397916*2')
+outr.index = range(len(outr.index))
+outl.index = range(len(outl.index))
+plt.scatter(outr['OVERALL RATIO'], outr['minus log p'], color = "red")
+plt.scatter(outl['OVERALL RATIO'], outl['minus log p'], color = "red")
+for i in range(len(outr)):
+    ax.annotate(outr['Gene Symbol'][i], 
+                 xy = (outr['OVERALL RATIO'][i], outr['minus log p'][i]),
+                 fontsize = 10,
+                 textcoords="offset points")
+for i in range(len(outl)):
+    ax.annotate(outl['Gene Symbol'][i], 
+                 xy = (outl['OVERALL RATIO'][i], outl['minus log p'][i]),
+                 fontsize = 10,
+                 textcoords="offset points")
+sns.despine()
+plt.ylabel('-$log_{10}$(p-value)', fontsize = 18)
+plt.xlabel('$log_2$(dDAVP/control)', fontsize = 18)
+plt.title("Volcano Plot (15 min) n = 5444", fontsize = 24)
+plt.ylim(0,4.5)
+plt.xlim(-1.3,1.3)
+ax.axhline(1.303, color = 'blue', ls='--')
+plt.text(-1.2,1.35,'1.303')
+ax.axvline(0.054397916*2, color = 'blue', ls='--')
+plt.text(0.12,4.1,'0.109', rotation=90)
+ax.axvline(-0.054397916*2, color = 'blue', ls='--')
+plt.text(-0.10,4.1,'-0.109', rotation=90)
+plt.savefig("Volcano total 15", dpi = 1200)
+
+#5 min
+df_T3 = pd.read_excel(fileloc, sheet_name="5 min")
+
+fig, ax = plt.subplots(figsize=(12,10))
+plt_T3 = sns.scatterplot(data = df_T3, x="OVERALL RATIO",  y="minus log p",
+                         color = 'lightgrey')
+outr = df_T3.query('`minus log p` > 1.303 & `OVERALL RATIO` > 0.050789416*2')
+outl = df_T3.query('`minus log p` > 1.303 & `OVERALL RATIO` < -0.050789416*2')
+outr.index = range(len(outr.index))
+outl.index = range(len(outl.index))
+plt.scatter(outr['OVERALL RATIO'], outr['minus log p'], color = "red")
+plt.scatter(outl['OVERALL RATIO'], outl['minus log p'], color = "red")
+for i in range(len(outr)):
+    ax.annotate(outr['Gene Symbol'][i], 
+                 xy = (outr['OVERALL RATIO'][i], outr['minus log p'][i]),
+                 fontsize = 10,
+                 textcoords="offset points")
+for i in range(len(outl)):
+    ax.annotate(outl['Gene Symbol'][i], 
+                 xy = (outl['OVERALL RATIO'][i], outl['minus log p'][i]),
+                 fontsize = 10,
+                 textcoords="offset points")
+sns.despine()
+plt.ylabel('-$log_{10}$(p-value)', fontsize = 18)
+plt.xlabel('$log_2$(dDAVP/control)', fontsize = 18)
+plt.title("Volcano Plot (5 min) n = 5444", fontsize = 24)
+plt.ylim(0,4.5)
+plt.xlim(-1.3,1.3)
+ax.axhline(1.303, color = 'blue', ls='--')
+plt.text(-1.2,1.35,'1.303')
+ax.axvline(0.050789416*2, color = 'blue', ls='--')
+plt.text(0.12,4.1,'0.102', rotation=90)
+ax.axvline(-0.050789416*2, color = 'blue', ls='--')
+plt.text(-0.10,4.1,'-0.102', rotation=90)
+plt.savefig("Volcano total 5", dpi = 1200)
+
+#2 min
+df_T2 = pd.read_excel(fileloc, sheet_name="2 min")
+
+fig, ax = plt.subplots(figsize=(12,10))
+plt_T2 = sns.scatterplot(data = df_T2, x="OVERALL RATIO",  y="minus log p",
+                         color = 'lightgrey')
+outr = df_T2.query('`minus log p` > 1.303 & `OVERALL RATIO` > 0.044202462*2')
+outl = df_T2.query('`minus log p` > 1.303 & `OVERALL RATIO` < -0.044202462*2')
+outr.index = range(len(outr.index))
+outl.index = range(len(outl.index))
+plt.scatter(outr['OVERALL RATIO'], outr['minus log p'], color = "red")
+plt.scatter(outl['OVERALL RATIO'], outl['minus log p'], color = "red")
+for i in range(len(outr)):
+    ax.annotate(outr['Gene Symbol'][i], 
+                 xy = (outr['OVERALL RATIO'][i], outr['minus log p'][i]),
+                 fontsize = 10,
+                 textcoords="offset points")
+for i in range(len(outl)):
+    ax.annotate(outl['Gene Symbol'][i], 
+                 xy = (outl['OVERALL RATIO'][i], outl['minus log p'][i]),
+                 fontsize = 10,
+                 textcoords="offset points")
+sns.despine()
+plt.ylabel('-$log_{10}$(p-value)', fontsize = 18)
+plt.xlabel('$log_2$(dDAVP/control)', fontsize = 18)
+plt.title("Volcano Plot (2 min) n = 5444", fontsize = 24)
+plt.ylim(0,4.5)
+plt.xlim(-1.3,1.3)
+ax.axhline(1.303, color = 'blue', ls='--')
+plt.text(-1.2,1.35,'1.303')
+ax.axvline(0.044202462*2, color = 'blue', ls='--')
+plt.text(0.11,4.1,'0.088', rotation=90)
+ax.axvline(-0.044202462*2, color = 'blue', ls='--')
+plt.text(-0.09,4.1,'-0.088', rotation=90)
+plt.savefig("Volcano total 2", dpi = 1200)
+
+#1 min
+df_T1 = pd.read_excel(fileloc, sheet_name="1 min")
+
+fig, ax = plt.subplots(figsize=(12,10))
+plt_T1 = sns.scatterplot(data = df_T1, x="OVERALL RATIO",  y="minus log p",
+                         color = 'lightgrey')
+outr = df_T1.query('`minus log p` > 1.303 & `OVERALL RATIO` > 0.05433744*2')
+outl = df_T1.query('`minus log p` > 1.303 & `OVERALL RATIO` < -0.05433744*2')
+outr.index = range(len(outr.index))
+outl.index = range(len(outl.index))
+plt.scatter(outr['OVERALL RATIO'], outr['minus log p'], color = "red")
+plt.scatter(outl['OVERALL RATIO'], outl['minus log p'], color = "red")
+for i in range(len(outr)):
+    ax.annotate(outr['Gene Symbol'][i], 
+                 xy = (outr['OVERALL RATIO'][i], outr['minus log p'][i]),
+                 fontsize = 10,
+                 textcoords="offset points")
+for i in range(len(outl)):
+    ax.annotate(outl['Gene Symbol'][i], 
+                 xy = (outl['OVERALL RATIO'][i], outl['minus log p'][i]),
+                 fontsize = 10,
+                 textcoords="offset points")
+sns.despine()
+plt.ylabel('-$log_{10}$(p-value)', fontsize = 18)
+plt.xlabel('$log_2$(dDAVP/control)', fontsize = 18)
+plt.title("Volcano Plot (1 min) n = 5444", fontsize = 24)
+plt.ylim(0,4.5)
+plt.xlim(-1.3,1.3)
+ax.axhline(1.303, color = 'blue', ls='--')
+plt.text(-1.2,1.35,'1.303')
+ax.axvline(0.05433744*2, color = 'blue', ls='--')
+plt.text(0.12,4.1,'0.109', rotation=90)
+ax.axvline(-0.05433744*2, color = 'blue', ls='--')
+plt.text(-0.10,4.1,'-0.109', rotation=90)
+plt.savefig("Volcano total 1", dpi = 1200)
 
 
 
