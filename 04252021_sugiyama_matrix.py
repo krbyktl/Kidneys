@@ -300,3 +300,46 @@ plt.tight_layout()
 plt.savefig("J:\Depot - dDAVP-time course - Kirby\Figures\IC position weight",
             dpi=600)
     
+
+
+
+#STY screening
+STY_freq = list(range(len(freq_ind)))
+for h in range(len(freq_ind)):
+    STY_freq[h] = np.transpose(freq_ind[h])[6]
+
+STY_freq_1 = list(range(len(clusters)))
+for g in range(len(clusters)):
+    STY_freq_1[g] = np.transpose(clusters[g])[6]
+    
+STY_dotscores = list(range(len(STY_freq_1)))
+for u in range(len(STY_freq_1)):
+    kinSTYscores = list(range(len(STY_freq)))
+    for p in range(len(STY_freq)):
+        rank = np.dot(STY_freq[p],STY_freq_1[u])
+        kinSTYscores[p] = rank
+    STY_dotscores[u] = kinSTYscores
+STYdotscores_df = pd.DataFrame(np.transpose(STY_dotscores), columns = clusters_name, index = kinases.tolist())       
+
+
+fileloc4 = "J:\Depot - dDAVP-time course - Kirby\BayesAnalysis\\STY dot product ranking.xlsx"
+from openpyxl import load_workbook
+book = load_workbook(fileloc4)
+writer = pd.ExcelWriter(fileloc4, engine = 'openpyxl')
+writer.book = book
+STYdotscores_df.to_excel(writer, sheet_name = 'imported ranking')
+writer.save()
+writer.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
