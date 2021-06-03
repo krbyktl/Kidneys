@@ -176,60 +176,7 @@ for b in IC_cluster_array:
 
 cluster_IC_dict = {k:v for k,v in zip(clusters_name,IC_cluster_array)}
 
-# =============================================================================
-# #flatten each kinase matrix
-# ravel_kinase = list(range(len(IC_array)))
-# for w in range(len(IC_array)):
-#     ravel_kinase[w] = np.nan_to_num(np.ravel(IC_array[w]))
-# kinase_ravel_dict = {k:v for k,v in zip(kinases,ravel_kinase)}
-# 
-# #flatten each cluster matrix
-# ravel_cluster = list(range(len(IC_cluster_array)))
-# for q in range(len(IC_cluster_array)):
-#     ravel_cluster[q] = np.nan_to_num(np.ravel(IC_cluster_array[q]))
-# cluster_ravel_dict = {k:v for k,v in zip(clusters_name,ravel_cluster)}
-# 
-# #dot product calculations
-# from bayesmodules import dotscores
-# kinases = np.asarray(kinases)
-# dotscores_df = dotscores(ravel_kinase,ravel_cluster,kinases,clusters_name)
-# 
-# =============================================================================
-# =============================================================================
-# fileloc4 = "J:\Depot - dDAVP-time course - Kirby\BayesAnalysis\\kinase cluster ranking.xlsx"
-# from openpyxl import load_workbook
-# book = load_workbook(fileloc4)
-# writer = pd.ExcelWriter(fileloc4, engine = 'openpyxl')
-# writer.book = book
-# dotscores_df.to_excel(writer, sheet_name = 'dot product ranking')
-# writer.save()
-# writer.close()
-# =============================================================================
-
-# =============================================================================
-# #correlation coefficient calculations
-# corrscores = list(range(len(ravel_cluster)))
-# for u in range(len(ravel_cluster)):
-#     cluster_scores = list(range(len(ravel_kinase)))
-#     for p in range(len(ravel_kinase)):
-#         rank = np.corrcoef(ravel_cluster[u],ravel_kinase[p])[0][1]
-#         cluster_scores[p] = rank
-#     corrscores[u] = cluster_scores
-# corr_df = pd.DataFrame(np.transpose(corrscores), columns = clusters_name, index = kinases.tolist())       
-# 
-# =============================================================================
-# =============================================================================
-# fileloc4 = "J:\Depot - dDAVP-time course - Kirby\BayesAnalysis\\kinase cluster ranking.xlsx"
-# from openpyxl import load_workbook
-# book = load_workbook(fileloc4)
-# writer = pd.ExcelWriter(fileloc4, engine = 'openpyxl')
-# writer.book = book
-# corr_df.to_excel(writer, sheet_name = 'pearson corr ranking')
-# writer.save()
-# writer.close()
-# =============================================================================
-
-    
+# %%
 #sum of information content for positions
 kinase_sums = []
 for v in range(12):
@@ -285,20 +232,6 @@ for j in range(len(norm_content)):
     for g in range(len(IC_cluster_array)):
         pos_clus[g] = np.transpose(np.nan_to_num(IC_cluster_array[g]))[j]
     pos_dotscore_list[j] = dotscores(pos_kin,pos_clus,screened_kinases,clusters_name)
-    
-#*norm_content[j]
-
-# %%
-# individual position (freq) screening with weights
-pos_dotscorefreq_list = list(range(len(norm_content)))
-for j in range(len(norm_content)):
-    pos_kin = list(range(len(freq_ind)))
-    for h in range(len(freq_ind)):
-        pos_kin[h] = np.transpose(np.nan_to_num(freq_ind[h]))[j]
-    pos_clus = list(range(len(freqclus_ind)))
-    for g in range(len(freqclus_ind)):
-        pos_clus[g] = np.transpose(np.nan_to_num(freqclus_ind[g]))[j]
-    pos_dotscorefreq_list[j] = dotscores(pos_kin,pos_clus,screened_kinases,clusters_name)
     
 #*norm_content[j]
 

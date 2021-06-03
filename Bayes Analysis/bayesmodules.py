@@ -30,7 +30,7 @@ def dotscores(x_vals, y_vals, x_names, y_names):
 # kinmatrix refers to the sugiyama-derived matrix of interest (just one)
 # =============================================================================
 def interpolate(kinmatrix):
-    fileloc = "J:\Depot - dDAVP-time course - Kirby\BayesAnalysis\euijung assignment\\interpolator_forscript.xlsx"
+    fileloc = "/Users/kirbyleo/Box Sync/Depot - dDAVP-time course - Kirby/BayesAnalysis/euijung assignment/interpolator_forscript.xlsx"
     interpoltools = pd.read_excel(fileloc, None)
     kinmatrix.reset_index(inplace=True)
     kinmatrix = kinmatrix.rename(columns = {'index':'Human Kinase'})
@@ -71,7 +71,7 @@ def cMBF_calc(newdata,noise):
 # =============================================================================
 
 def selectpos_bayes(cluster,dotposdata,coloc):
-    fileloc5 = "J:\Depot - dDAVP-time course - Kirby\BayesAnalysis\\important positions in clusters.xlsx"
+    fileloc5 = "/Users/kirbyleo/Box Sync/Depot - dDAVP-time course - Kirby/BayesAnalysis/important positions in clusters.xlsx"
     cluspos = pd.read_excel(fileloc5, 'V2')
     clusmat = cluspos[cluster]
     int_posselec = []
