@@ -43,7 +43,7 @@ for i in clus_names:
     main_vec[i + '_STY'] = prod/sum(prod)
 main_vec = main_vec.drop(clus_names,axis=1)
 
-fileloc_3 = "/Users/kirbyleo/Box Sync/Depot - dDAVP-time course - Kirby/BayesAnalysis/BayesTC complete calc_python V14.xlsx"
+fileloc_3 = "/Users/kirbyleo/Box Sync/Depot - dDAVP-time course - Kirby/BayesAnalysis/BayesTC complete calc_python V17.xlsx"
 writer=pd.ExcelWriter(fileloc_3)
 main_vec.to_excel(writer, sheet_name='STY ranking')
 
@@ -73,7 +73,7 @@ writer.close()
 # %%
 # known kinases
 fileloc_4 = "/Users/kirbyleo/Box Sync/Depot - dDAVP-time course - Kirby/BayesAnalysis/Bayes sheets/BayesTC_known kinases.xlsx"
-known_df = pd.read_excel(fileloc_4, "Simplified combined V2")
+known_df = pd.read_excel(fileloc_4, "Simplified combined V3")
 
 cluster_direct = ['Increase','Decrease','Decrease','Decrease','Decrease','Increase','Increase','Decrease',
                   'Decrease','Increase','Decrease','Decrease','Increase','Decrease']

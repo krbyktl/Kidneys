@@ -19,7 +19,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-fileloc = "J:\Depot - dDAVP-time course - Kirby\BayesAnalysis\\colocalization mapping V2.xlsx"
+fileloc = "/Users/kirbyleo/Box Sync/Depot - dDAVP-time course - Kirby/BayesAnalysis/colocalization mapping V2.xlsx"
 cluster_coloc = pd.read_excel(fileloc, sheet_name = "cluster distr")
 
 cluster_coloc = cluster_coloc.melt(id_vars=["Gene Symbol","Cluster"],
@@ -34,7 +34,7 @@ g.map(sns.barplot, "Fractions", "Abundance level", color=".3",
 
 
 plt.tight_layout()
-plt.savefig("J:\Depot - dDAVP-time course - Kirby\Figures\colocalization mapping clusters v3",
+plt.savefig("/Users/kirbyleo/Box Sync/Depot - dDAVP-time course - Kirby/Figures/colocalization mapping clusters v3",
             dpi=600)
 
 #create dot-score

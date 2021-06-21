@@ -53,6 +53,7 @@ def interpolate(kinmatrix):
 # input listvals is the input data for the new likelihood vector
 # noise is intrinsic noise, will depend on if data is expression data,
 # dot product scoring, correlation coefficients, etc
+# be aware of minimum likelihood cutoff value
 # =============================================================================
 def cMBF_calc(newdata,noise):
     cMBF = list(range(len(newdata)))
@@ -72,7 +73,7 @@ def cMBF_calc(newdata,noise):
 
 def selectpos_bayes(cluster,dotposdata,coloc):
     fileloc5 = "/Users/kirbyleo/Box Sync/Depot - dDAVP-time course - Kirby/BayesAnalysis/important positions in clusters.xlsx"
-    cluspos = pd.read_excel(fileloc5, 'V2')
+    cluspos = pd.read_excel(fileloc5, 'V3')
     clusmat = cluspos[cluster]
     int_posselec = []
     int_posselec.append(dotposdata[0]['Kinases'])
